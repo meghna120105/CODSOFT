@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simple Recommendation System</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        .recommendations {
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Movie Recommendation System</h1>
+    <form id="preferencesForm">
+        <label for="genre">Favorite Genre:</label>
+        <input type="text" id="genre" name="genre" required>
+        <button type="submit">Get Recommendations</button>
+    </form>
+
+    <div class="recommendations" id="recommendations">
+        <!-- Recommendations will be displayed here -->
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
