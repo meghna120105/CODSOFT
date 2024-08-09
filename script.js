@@ -1,38 +1,29 @@
-// Sample movie database
-const movies = [
-    { title: "The Shawshank Redemption", genre: "Drama" },
-    { title: "The Godfather", genre: "Crime" },
-    { title: "The Dark Knight", genre: "Action" },
-    { title: "Pulp Fiction", genre: "Crime" },
-    { title: "Forrest Gump", genre: "Drama" },
-    { title: "Inception", genre: "Sci-Fi" },
-    { title: "The Matrix", genre: "Sci-Fi" },
-    { title: "The Lord of the Rings", genre: "Fantasy" },
-    { title: "Avatar", genre: "Sci-Fi" }
-];
+// Ensure the face-api.js models are loaded
+async function loadModels() {
+    const MODEL_URL = '/models';
+    await faceapi.nets.ssdMobilenetv1.loadFromUri(MODEL_URL);
+    await faceapi.nets.faceLandmark68Net.loadFromUri(MODEL_URL);
+    await faceapi.nets.faceRecognitionNet.loadFromUri(MODEL_URL);
+}
 
-document.getElementById('preferencesForm').addEventListener('submit', function(event) {
-    event.preventDefault(); // Prevent form submission
+// Handle image input and face detection
+async function handleImageUpload(event) {
+    const image = await faceapi.bufferToImage(event.target.files[0]);
+    const canvas = document.getElementById('canvas');
+    const displaySize = { width: image.width, height: image.height };
+    faceapi.matchDimensions(canvas, displaySize);
+    const detections = await faceapi.detectAllFaces(image).withFaceLandmarks().withFaceDescriptors();
+    const resizedDetections = faceapi.resizeResults(detections, displaySize);
+    canvas.getContext('2d').clearRect(0, 0, canvas.width, canvas.height);
+    faceapi.draw.drawDetections(canvas, resizedDetections);
+    faceapi.draw.drawFaceLandmarks(canvas, resizedDetections);
+    document.getElementById('caption').textContent = `Detected ${detections.length} face(s)`;
+}
 
-    const genre = document.getElementById('genre').value.trim().toLowerCase();
-    const recommendations = getRecommendations(genre);
+// Set up the event listener for image input
+document.getElementById('imageInput').addEventListener('change', handleImageUpload);
 
-    displayRecommendations(recommendations);
+// Load models and initialize the app
+loadModels().then(() => {
+    console.log('Face-api.js models loaded');
 });
-
-function getRecommendations(preferredGenre) {
-    return movies.filter(movie => movie.genre.toLowerCase() === preferredGenre);
-}
-
-function displayRecommendations(recommendations) {
-    const recommendationsDiv = document.getElementById('recommendations');
-    recommendationsDiv.innerHTML = ''; // Clear previous recommendations
-
-    if (recommendations.length === 0) {
-        recommendationsDiv.innerHTML = '<p>No recommendations found for this genre.</p>';
-    } else {
-        recommendationsDiv.innerHTML = '<h2>Recommended Movies:</h2><ul>' +
-            recommendations.map(movie => `<li>${movie.title}</li>`).join('') +
-            '</ul>';
-    }
-}

@@ -3,29 +3,46 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Simple Recommendation System</title>
+    <title>Face Detection and Recognition</title>
     <style>
         body {
             font-family: Arial, sans-serif;
-            margin: 20px;
+            text-align: center;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
         }
-        .recommendations {
+        .container {
+            max-width: 800px;
+            margin: auto;
+            padding: 20px;
+            background: #fff;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        input[type="file"] {
+            margin-bottom: 20px;
+        }
+        canvas {
+            max-width: 100%;
+            height: auto;
+            border: 1px solid #ddd;
             margin-top: 20px;
+        }
+        .caption {
+            font-size: 1.2em;
+            color: #333;
+            margin-top: 10px;
         }
     </style>
 </head>
 <body>
-    <h1>Movie Recommendation System</h1>
-    <form id="preferencesForm">
-        <label for="genre">Favorite Genre:</label>
-        <input type="text" id="genre" name="genre" required>
-        <button type="submit">Get Recommendations</button>
-    </form>
-
-    <div class="recommendations" id="recommendations">
-        <!-- Recommendations will be displayed here -->
+    <div class="container">
+        <h1>Face Detection and Recognition</h1>
+        <input type="file" id="imageInput" accept="image/*">
+        <canvas id="canvas"></canvas>
+        <p class="caption" id="caption">Detection results will appear here...</p>
     </div>
-
+    <script defer src="https://cdn.jsdelivr.net/npm/face-api.js"></script>
     <script src="script.js"></script>
 </body>
 </html>
